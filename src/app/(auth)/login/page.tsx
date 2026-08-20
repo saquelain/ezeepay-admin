@@ -1,19 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock, Mail } from "lucide-react";
 import { login } from "@/lib/api/auth";
 import { useAuthStore } from "@/lib/store/auth.store";
+import { useHydrateAuth } from "@/hooks/useHydrateAuth";
 
 export default function LoginPage() {
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
+  const hasHydrated = useHydrateAuth();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (hasHydrated && isAuthenticated) {
+      router.replace("/blog");
+    }
+  }, [hasHydrated, isAuthenticated, router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,6 +40,14 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  if (!hasHydrated || isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 size={28} className="animate-spin text-brand-purple" />
+      </div>
+    );
   }
 
   return (
