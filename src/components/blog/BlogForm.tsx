@@ -193,7 +193,10 @@ export default function BlogForm({ mode, initialData }: BlogFormProps) {
 
           <div className="space-y-1.5">
             <Label>Category *</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Select
+              value={categoryId}
+              onValueChange={(value) => setCategoryId(value ?? "")}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>

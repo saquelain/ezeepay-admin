@@ -17,6 +17,8 @@ export type Category = {
     tags: string[];
     readTime: string | null;
     content: string;
+    metaTitle: string;
+    metaDescription: string;
     isPublished: boolean;
     publishedAt: string | null;
     views: number;
